@@ -18,7 +18,7 @@ type config struct {
 type cliCommand struct {
 	name        string
 	description string
-	callback    func(cfg *config) error
+	callback    func(cfg *config, s string) error
 }
 
 func cleanInput(s string) string {
@@ -38,10 +38,18 @@ func startRpl(cfg *config) {
 	printPrompt()
 	for reader.Scan() {
 		text := cleanInput(reader.Text())
-		if command, exists := commands[text]; exists {
-			err := command.callback(cfg)
-			if err != nil {
-				fmt.Println(err)
+		splitText := strings.Split(text, "")
+		if command, exists := commands[splitText[0]]; exists {
+			if len(splitText) > 1 {
+				err := command.callback(cfg, splitText[1])
+				if err != nil {
+					fmt.Println(err)
+				}
+			} else {
+				err := command.callback(cfg, splitText[0])
+				if err != nil {
+					fmt.Println(err)
+				}
 			}
 		} else {
 			fmt.Println("Unknown Command")
@@ -71,6 +79,11 @@ func getCommands() map[string]cliCommand {
 			name:        "mapb",
 			description: "Displays the names of the previous 20 location areas in the Pokemon world",
 			callback:    commandMapb,
+		},
+		"explore": {
+			name:        "explore",
+			description: "Explore a location to see a list of Pokemon in the area",
+			callback:    commandExplore,
 		},
 	}
 }
