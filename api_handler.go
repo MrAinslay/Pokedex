@@ -1,4 +1,4 @@
-package api_handler
+package main
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func GetAPI() {
+func getAPI() {
 	res, err := http.Get("https://pokeapi.co/api/v2/location-area/")
 	if err != nil {
 		log.Fatal(err)
