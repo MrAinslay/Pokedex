@@ -20,31 +20,30 @@ func (c *Cache) Get(key string) ([]byte, bool) {
 	return val.val, ok
 }
 
-func (c *Cache) ReapLoop() {
-	ticker := time.NewTicker(c.interval * time.Second)
-	defer ticker.Stop()
+func (c *Cache) reapLoop(interval time.Duration) {
+	ticker := time.NewTicker(interval)
+	for range ticker.C {
+		c.reap(time.Now().UTC(), interval)
+	}
+}
 
-	for {
-		select {
-		case <-ticker.C:
-			for key, cacheEntry := range c.cacheMap {
-				creationTime := cacheEntry.createdAt
-				t := time.Since(creationTime)
-				if t >= c.interval*time.Second {
-					c.mu.Lock()
-					delete(c.cacheMap, key)
-					c.mu.Unlock()
-				}
-			}
+func (c *Cache) reap(now time.Time, last time.Duration) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	for k, v := range c.cacheMap {
+		if v.createdAt.Before(now.Add(-last)) {
+			delete(c.cacheMap, k)
 		}
-
 	}
 }
 
 func NewCache(interval time.Duration) Cache {
-	return Cache{
-		cacheMap: map[string]cacheEntry{},
+	c := Cache{
+		cacheMap: make(map[string]cacheEntry),
 		mu:       &sync.Mutex{},
-		interval: interval,
 	}
+
+	go c.reapLoop(interval)
+
+	return c
 }
