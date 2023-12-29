@@ -1,15 +1,16 @@
 package main
 
 import (
-	"fmt"
 	"io"
 	"log"
 	"net/http"
 )
 
 func getAPI(s string) []byte {
-	link := fmt.Sprintf("https://pokeapi.co/api/v2/location-area/%s", s)
-	res, err := http.Get(link)
+	if s == "" {
+		s = "https://pokeapi.co/api/v2/location-area/"
+	}
+	res, err := http.Get(s)
 	if err != nil {
 		log.Fatal(err)
 		return nil
