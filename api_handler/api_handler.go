@@ -1,4 +1,4 @@
-package apihandler
+package api_handler
 
 import (
 	"io"
