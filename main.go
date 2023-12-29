@@ -4,6 +4,8 @@ import (
 	"time"
 
 	"github.com/MrAinslay/Pokedex/internal/pokeapi"
+
+	"github.com/MrAinslay/Pokedex/internal/pokecache"
 )
 
 func main() {
@@ -11,6 +13,7 @@ func main() {
 	cfg := &config{
 		pokeapiClient: pokeClient,
 	}
-
+	pokeCache := pokecache.NewCache(5 * time.Second)
+	go pokeCache.ReapLoop()
 	startRpl(cfg)
 }
