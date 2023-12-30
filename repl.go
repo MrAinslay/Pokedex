@@ -9,6 +9,10 @@ import (
 	"github.com/MrAinslay/Pokedex/internal/pokeapi"
 )
 
+type pokedex struct {
+	caughtPokemon map[string]pokeapi.Pokemon
+}
+
 type config struct {
 	pokeapiClient    pokeapi.Client
 	nextLocationsURL *string
@@ -82,8 +86,13 @@ func getCommands() map[string]cliCommand {
 		},
 		"explore": {
 			name:        "explore",
-			description: "Explore a location to see a list of Pokemon in the area",
+			description: "Explore a location to see a list of Pokemon in the area(usage: explore <location_name/location_id>)",
 			callback:    commandExplore,
+		},
+		"catch": {
+			name:        "catch",
+			description: "Try to catch a pokemon(usage: catch <pokemon_name>)",
+			callback:    commandCatch,
 		},
 	}
 }

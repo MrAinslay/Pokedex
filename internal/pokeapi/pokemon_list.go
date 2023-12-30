@@ -2,16 +2,12 @@ package pokeapi
 
 import (
 	"encoding/json"
-	"errors"
 	"io"
 	"net/http"
 )
 
 func (c *Client) ListPokemon(locationName string) (Encounters, error) {
 	url := baseURL + "/location-area/"
-	if locationName == "" {
-		return Encounters{}, errors.New("no location name given")
-	}
 	url += locationName
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
