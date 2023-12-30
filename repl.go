@@ -38,7 +38,7 @@ func startRpl(cfg *config) {
 	printPrompt()
 	for reader.Scan() {
 		text := cleanInput(reader.Text())
-		splitText := strings.Split(text, "")
+		splitText := strings.Split(text, " ")
 		if command, exists := commands[splitText[0]]; exists {
 			if len(splitText) > 1 {
 				err := command.callback(cfg, splitText[1])
