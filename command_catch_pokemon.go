@@ -12,11 +12,15 @@ func commandCatch(cfg *config, s string) error {
 		return err
 	}
 	pokemonExperience := pokemon.BaseExperience
+	fmt.Println("Throwing a pokeball at", pokemon.Name)
 	if pokemonExperience > n {
 		fmt.Println(pokemon.Name, "escaped!")
 		return nil
 	}
 	fmt.Println(pokemon.Name, "was caught!")
-
+	storePokemon(cfg, pokemon.Name)
+	if err != nil {
+		return err
+	}
 	return nil
 }

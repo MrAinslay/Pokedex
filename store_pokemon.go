@@ -1,5 +1,10 @@
 package main
 
-func (p *pokedex) storePokemon(cfg *config, pokemonName string) {
-	p.caughtPokemon[pokemonName] = pokemonInfo
+func storePokemon(cfg *config, pokemonName string) error {
+	pokemonInfo, err := cfg.pokeapiClient.GetPokemonInfo(pokemonName)
+	if err != nil {
+		return err
+	}
+	cfg.caughtPokemon[pokemonName] = pokemonInfo
+	return nil
 }

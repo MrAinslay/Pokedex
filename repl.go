@@ -9,14 +9,11 @@ import (
 	"github.com/MrAinslay/Pokedex/internal/pokeapi"
 )
 
-type pokedex struct {
-	caughtPokemon map[string]pokeapi.Pokemon
-}
-
 type config struct {
 	pokeapiClient    pokeapi.Client
 	nextLocationsURL *string
 	prevLocationsURL *string
+	caughtPokemon    map[string]pokeapi.Pokemon
 }
 
 type cliCommand struct {
